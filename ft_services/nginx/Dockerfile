@@ -6,28 +6,31 @@
 #    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/14 17:28:24 by gshona            #+#    #+#              #
-#    Updated: 2020/12/14 20:24:09 by gshona           ###   ########.fr        #
+#    Updated: 2020/12/15 16:14:14 by gshona           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM alpine
+
 RUN apk update && apk upgrade
 RUN apk add nginx openssl openssh supervisor
 
-# Ssl
 RUN mkdir /etc/nginx/ssl
+RUN echo "root:toor" | chpasswd
+RUN adduser -D gshona &&  echo "gshona:toor" | chpasswd
 RUN openssl req -x509 -nodes -days 30 -newkey rsa:2048 -subj \
 "/C=RU/ST=Kazan/L=Kazan/O=gshona/CN=localhost" -keyout \
 /etc/ssl/private/gshona.key -out /etc/ssl/certs/gshona.crt
 
-# Nginx
 COPY ./srcs/config_nginx /etc/nginx/conf.d/default.conf
+COPY ./srcs/index.html /var/www/localhost/index.html
+COPY ./srcs/supervisor.conf /etc/supervisord.conf
 
-EXPOSE 80 443
+RUN ssh-keygen -A
 
-# Run
+EXPOSE 80 443 22
+
 COPY ./start.sh /tmp
 RUN		mkdir /run/nginx
-#CMD ["sh /start.sh"]
 ENTRYPOINT ["/tmp/start.sh"]
 
