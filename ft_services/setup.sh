@@ -3,8 +3,17 @@ minikube delete;
 minikube start --vm-driver=virtualbox
 minikube addons enable metallb
 
-IP = $(kubectl get node -o=custom-columns='DATA:status.addresses[0].address' | sed -n 2p);
+kubectl apply -f lbconf.yaml
 
 eval $(minikube docker-env)
 docker build -t nginx_image nginx
-docker build -t wordpress_image wordpress --build-arg IP=${IP}
+docker build -t wordpress_image wordpress
+docker build -t phpmyadmin_image phpmyadmin
+docker build -t mysql_image mysql
+
+kubectl apply -f mysql/mysql.yaml
+kubectl apply -f nginx/nginx.yaml
+kubectl apply -f wordpress/wordpress.yaml
+kubectl apply -f phpmyadmin/phpmyadmin.yaml
+
+minikube dashboard

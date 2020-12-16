@@ -1,36 +1,36 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-svc
+  name: phpmyadmin-svc
 spec:
   selector:
-    app: wordpress
+    app: phpmyadmin
   type: LoadBalancer
   ports:
     - protocol: TCP
-      name: wordpress
-      port: 5050
-      targetPort: 5050
+      name: phpmyadmin
+      port: 5000
+      targetPort: 5000
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wordpress
+  name: phpmyadmin
   labels:
-      app: wordpress
+      app: phpmyadmin
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: wordpress
+            app: phpmyadmin
     template:
         metadata:
             labels:
-                app: wordpress
+                app: phpmyadmin
         spec:
             containers:
-              - name: wordpress
-                image: wordpress_image
+              - name: phpmyadmin
+                image: phpmyadmin_image
                 imagePullPolicy: Never
                 ports:
-                    - containerPort: 5050
+                    - containerPort: 5000

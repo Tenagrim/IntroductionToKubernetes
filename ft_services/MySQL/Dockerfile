@@ -1,14 +1,29 @@
-FROM alpine
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Dockerfile                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/12/16 14:51:54 by gshona            #+#    #+#              #
+#    Updated: 2020/12/16 15:03:22 by gshona           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-RUN apk update && apk upgrade
-RUN apk add mariadb mariadb-client
+FROM	alpine
 
-RUN mkdir /etc/nginx/ssl
-RUN echo "root:toor" | chpasswd
-RUN adduser -D gshona &&  echo "gshona:toor" | chpasswd
+RUN		apk update && apk upgrade
+RUN		apk add mariadb mariadb-client
 
-EXPOSE 3306
+RUN		mkdir -p /run/mysqld
 
-COPY ./start.sh /tmp
+RUN		echo "root:toor" | chpasswd
+RUN		adduser -D gshona &&  echo "gshona:toor" | chpasswd
+
+EXPOSE	3306
+
+COPY	./start.sh /tmp
+COPY	./my.cnf /etc/mysql/my.cnf
 RUN		mkdir /run/nginx
+
 ENTRYPOINT ["/tmp/start.sh"]
