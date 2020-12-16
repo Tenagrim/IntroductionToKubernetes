@@ -5,22 +5,17 @@
 #                                                     +:+ +:+         +:+      #
 #    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/12/16 18:45:15 by gshona            #+#    #+#              #
-#    Updated: 2020/12/16 18:47:19 by gshona           ###   ########.fr        #
+#    Created: 2020/12/16 19:02:08 by gshona            #+#    #+#              #
+#    Updated: 2020/12/16 19:02:47 by gshona           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM alpine
+FROM	alpine
 
 RUN		apk update && apk upgrade
-RUN		apk add wget php7 php7-fpm php7-opcache php7-gd php7-mysqli php7-zlib php7-curl php7-mbstring php7-json php7-session
+RUN		apk add grafana --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ --allow-untrusted --no-cache
 
-EXPOSE	5050
-RUN		wget https://wordpress.org/latest.tar.gz
-RUN		tar -xvzf latest.tar.gz
-RUN		mv wordpress /var/www && rm latest.tar.gz
-RUN		ls /var/www
-COPY	./srcs/wp-config.php /var/www/
+EXPOSE	3000
 
 COPY	./start.sh /tmp
 
