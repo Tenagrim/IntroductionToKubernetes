@@ -6,7 +6,7 @@
 #    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/14 17:28:24 by gshona            #+#    #+#              #
-#    Updated: 2020/12/15 16:14:14 by gshona           ###   ########.fr        #
+#    Updated: 2020/12/17 18:42:05 by gshona           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ RUN openssl req -x509 -nodes -days 30 -newkey rsa:2048 -subj \
 
 COPY ./srcs/config_nginx /etc/nginx/conf.d/default.conf
 COPY ./srcs/index.html /var/www/localhost/index.html
+COPY ./srcs/particles.js /var/www/localhost/particles.js
 COPY ./srcs/supervisor.conf /etc/supervisord.conf
 
 RUN ssh-keygen -A
