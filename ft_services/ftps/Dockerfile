@@ -5,24 +5,23 @@
 #                                                     +:+ +:+         +:+      #
 #    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/12/16 14:51:54 by gshona            #+#    #+#              #
-#    Updated: 2020/12/19 18:49:06 by gshona           ###   ########.fr        #
+#    Created: 2020/12/19 18:41:06 by gshona            #+#    #+#              #
+#    Updated: 2020/12/19 18:55:57 by gshona           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM	alpine
-
+FROM alpine
 RUN		apk update && apk upgrade
-RUN		apk add mariadb mariadb-client
+RUN		apk add openssl vsftpd
 
-RUN		mkdir -p /run/mysqld
-
-RUN		echo "root:toor" | chpasswd
+RUN openssl req -x509 -nodes -days 30 -newkey rsa:2048 -subj \
+"/C=RU/ST=Kazan/L=Kazan/O=gshona/CN=localhost" -keyout \
+/etc/ssl/private/gshona.key -out /etc/ssl/certs/gshona.crt
 RUN		adduser -D gshona &&  echo "gshona:toor" | chpasswd
 
-EXPOSE	3306
+EXPOSE	20 21
 
 COPY	./start.sh /tmp
-COPY	./my.cnf /etc/mysql/my.cnf
+COPY	./vsftpd.conf /etc/vsftpd/vsftpd.conf
 
-ENTRYPOINT ["/tmp/start.sh"]
+CMD		["/tmp/start.sh"]

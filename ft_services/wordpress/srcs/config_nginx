@@ -1,0 +1,16 @@
+server
+{
+    listen 5050 default_server;
+    listen [::]:5050 default_server;
+	root /var/www/localhost/wordpress;
+    server_name _;
+    index index.php index.htm index.html;
+    location ~ \.php$ {
+#        include snippets/fastcgi-php.conf;
+#        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+		fastcgi_pass 127.0.0.1:9000;
+           #fastcgi_index index.php;
+           #include fastcgi_params;
+		   include fastcgi.conf;
+    }
+}
