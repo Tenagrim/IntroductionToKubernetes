@@ -1,11 +1,14 @@
 FROM alpine
 
 RUN apk update && apk upgrade
-RUN apk add wget supervisor nginx php7 php7-fpm php7-opcache php7-gd php7-mysqli php7-zlib php7-curl php7-mbstring php7-json php7-session
+RUN apk add wget openssl supervisor nginx php7 php7-fpm php7-opcache php7-gd php7-mysqli php7-zlib php7-curl php7-mbstring php7-json php7-session
 
 RUN mkdir -p /var/www/localhost/phpmyadmin
 RUN mkdir -p /run/nginx
 RUN mkdir -p /run/php
+RUN openssl req -x509 -nodes -days 30 -newkey rsa:2048 -subj \
+"/C=RU/ST=Kazan/L=Kazan/O=gshona/CN=localhost" -keyout \
+/etc/ssl/private/gshona.key -out /etc/ssl/certs/gshona.crt
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.7/phpMyAdmin-4.9.7-english.tar.gz -O phpmyadmin.tar.gz
 RUN tar -xvzf phpmyadmin.tar.gz
 RUN mv phpMyAdmin-4.9.7-english/* /var/www/localhost/phpmyadmin &&  rm phpmyadmin.tar.gz && rm -rf phpMyAdmin-4.9.7-english

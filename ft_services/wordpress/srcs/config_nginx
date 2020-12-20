@@ -1,7 +1,9 @@
 server
 {
-    listen 5050 default_server;
-    listen [::]:5050 default_server;
+    listen 5050 ssl default_server;
+    listen [::]:5050 ssl default_server;
+    ssl_certificate /etc/ssl/certs/gshona.crt;
+    ssl_certificate_key /etc/ssl/private/gshona.key;
 	root /var/www/localhost/wordpress;
     server_name _;
     index index.php index.htm index.html;

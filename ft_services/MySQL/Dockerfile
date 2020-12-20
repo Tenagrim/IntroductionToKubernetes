@@ -6,7 +6,7 @@
 #    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/16 14:51:54 by gshona            #+#    #+#              #
-#    Updated: 2020/12/19 18:49:06 by gshona           ###   ########.fr        #
+#    Updated: 2020/12/20 13:49:01 by gshona           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ RUN		adduser -D gshona &&  echo "gshona:toor" | chpasswd
 EXPOSE	3306
 
 COPY	./start.sh /tmp
+COPY	./gshona_db.sql /tmp
 COPY	./my.cnf /etc/mysql/my.cnf
 
 ENTRYPOINT ["/tmp/start.sh"]
