@@ -6,7 +6,7 @@
 #    By: gshona <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/12/16 18:45:15 by gshona            #+#    #+#              #
-#    Updated: 2020/12/20 14:35:19 by gshona           ###   ########.fr        #
+#    Updated: 2020/12/21 13:45:50 by gshona           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,10 @@ RUN		mv wordpress /var/www/localhost && rm latest.tar.gz
 RUN		ls /var/www
 COPY	./srcs/wp-config.php /var/www/localhost/wordpress
 
-COPY	./start.sh /tmp
-COPY	./srcs/supervisor.conf /etc/supervisord.conf
+#COPY	./start.sh /tmp
+RUN		mkdir -p /etc/supervisor.d
+COPY	./srcs/supervisor.conf /etc/supervisor.d/supervisor.ini
 COPY	./srcs/config_nginx /etc/nginx/conf.d/default.conf
 
-CMD		["/tmp/start.sh"]
+#CMD		["/tmp/start.sh"]
+ENTRYPOINT /usr/bin/supervisord

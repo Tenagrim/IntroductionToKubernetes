@@ -3,6 +3,7 @@ minikube delete;
 
 minikube start --vm-driver=virtualbox
 minikube addons enable metallb
+minikube addons enable dashboard
 
 kubectl apply -f srcs/lbconf.yaml
 
