@@ -1,13 +1,38 @@
 #!/bin/bash
+
+clear
+
 minikube delete;
 
-minikube start --vm-driver=virtualbox
+
+#kubectl get pods -n metallb-system
+F=1
+while [ $F -gt 0 ]
+do
+	minikube start --vm-driver=virtualbox
+	minikube status
+	echo "[[[ \$? = $? ]]]"
+	if [ $? -ne 0 ]
+	then
+		echo "[[[ \$? = $? ]]]"
+		echo	">>>>>>>>>>  MINIKUBE FAILED TO START. RETRY... <<<<<<<<<< "
+		F=1
+	else
+		F=0
+	fi
+done
+echo "[[[ \$? = $? ]]]"
+echo 			">>>>>>>>>>  MINIKUBE STARTED <<<<<<<<<< "
+eval $(minikube docker-env)
+
+docker pull metallb/speaker:v0.8.2
+docker pull metallb/controller:v0.8.2
+
 minikube addons enable metallb
 minikube addons enable dashboard
 
 kubectl apply -f srcs/lbconf.yaml
 
-eval $(minikube docker-env)
 docker build -t nginx_image srcs/nginx
 docker build -t wordpress_image srcs/wordpress
 docker build -t phpmyadmin_image srcs/phpmyadmin
