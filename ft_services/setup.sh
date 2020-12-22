@@ -2,27 +2,25 @@
 
 clear
 
-minikube delete;
-
-
 #kubectl get pods -n metallb-system
-F=1
-while [ $F -gt 0 ]
+tmp=1
+retr=0
+
+while true
 do
+	minikube delete;
 	minikube start --vm-driver=virtualbox
 	minikube status
-	echo "[[[ \$? = $? ]]]"
-	if [ $? -ne 0 ]
+	tmp=$?
+	((retr++))
+	if [ $tmp -eq "0" ]
 	then
-		echo "[[[ \$? = $? ]]]"
-		echo	">>>>>>>>>>  MINIKUBE FAILED TO START. RETRY... <<<<<<<<<< "
-		F=1
-	else
-		F=0
+		echo 	">>>>>>>>>>>>>>>>  MINIKUBE STARTED  <<<<<<<<<<<<<<<<<<<<< "
+		break
 	fi
+		echo	">>>>>>>>>>  MINIKUBE FAILED TO START. RETRY... <<<<<<<<<< "
 done
-echo "[[[ \$? = $? ]]]"
-echo 			">>>>>>>>>>  MINIKUBE STARTED <<<<<<<<<< "
+
 eval $(minikube docker-env)
 
 docker pull metallb/speaker:v0.8.2
@@ -50,5 +48,8 @@ kubectl apply -f srcs/influxdb/influxdb.yaml
 kubectl apply -f srcs/grafana/grafana.yaml
 kubectl apply -f srcs/telegraf/telegraf.yaml
 kubectl apply -f srcs/ftps/ftps.yaml
+
+
+echo 	">>>>>>>>>>>>>>>>  MINIKUBE STARTED.  TRIES: $retr <<<<<<<<<<<<<<<<<<<<< "
 
 minikube dashboard
