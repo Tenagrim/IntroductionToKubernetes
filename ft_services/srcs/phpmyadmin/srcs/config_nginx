@@ -1,10 +1,11 @@
 server
 {
-    listen 5000 ssl default_server;
-    listen [::]:5000 ssl default_server;
+    listen 5000 default_server;
+    listen [::]:5000 default_server;
+    ssl on;
     ssl_certificate /etc/ssl/certs/gshona.crt;
     ssl_certificate_key /etc/ssl/private/gshona.key;
-    root /var/www/localhost/phpmyadmin;
+	root /var/www/localhost/phpmyadmin;
     server_name _;
     index index.php index.htm index.html;
     location ~ \.php$ {
